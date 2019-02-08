@@ -9,8 +9,6 @@ trait HasMutators
     /**
      * Concatenate the invite's parameters.
      *
-     * @todo Filter out parameters that haven't been set
-     *
      * @return array
      */
     public function getEventParametersAttribute(): array

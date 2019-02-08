@@ -44,7 +44,7 @@ class NowCal
      *
      * @param array $params
      */
-    public function __construct(array $params)
+    public function __construct(array $params = [])
     {
         $this->merge($params);
     }

@@ -1,7 +1,16 @@
 {
   "name": "itsnubix/nowcal",
   "version": "0.1.0",
-  "description": "A modern PHP library for building iCalendar v.2 events",
+  "description": "A modern PHP library for generating iCalendar v2.0 events",
+  "keywords": [
+    "icalendar",
+    "calendar",
+    "ics"
+  ],
+  "support": {
+    "issues": "https://github.com/itsnubix/nowcal/issues",
+    "source": "https://github.com/itsnubix/nowcal"
+  },
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -10,9 +19,15 @@
       "email": "kmilloy@nubix.ca"
     }
   ],
+  "minimum-stability": "dev",
   "require": {
     "illuminate/support": "^5.7",
     "nesbot/carbon": "^1.33",
     "ramsey/uuid": "^3.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "NowCal\\": "src/NowCal/"
+    }
   }
 }
