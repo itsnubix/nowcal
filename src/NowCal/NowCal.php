@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Calendar;
+namespace NowCal;
 
 use Illuminate\Support\Str;
 

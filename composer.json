@@ -1,0 +1,17 @@
+{
+  "name": "itsnubix/nowcal",
+  "description": "A modern PHP library for building iCalendar v.2 events",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kyle Milloy",
+      "email": "kmilloy@nubix.ca"
+    }
+  ],
+  "require": {
+    "illuminate/support": "^5.7",
+    "nesbot/carbon": "^1.33",
+    "ramsey/uuid": "^3.8"
+  }
+}
