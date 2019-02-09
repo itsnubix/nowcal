@@ -29,6 +29,24 @@ $event->raw;
 
 // Export ICS as plain text
 $event->plain;
+
+
+
+// Or a mix of both
+$props = [
+  'start' => 'October 5, 2019 6:03PM'
+];
+
+$event = new NowCal($props);
+
+$event->summary('Daft Punk is playing')
+  ->location('My House');
+
+// Export ICS as array
+$event->raw;
+
+// Export ICS as plain text
+$event->plain;
 ```
 
 ## Todo
