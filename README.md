@@ -25,7 +25,8 @@ $plain = NowCal::plain($props);
 
 $props = ['start' => 'October 5, 2019 6:03PM'];
 
-$event = (new NowCal($props))->summary('Daft Punk is playing')
+$event = (new NowCal($props))
+  ->summary('Daft Punk is playing')
   ->location('My House');
 
 // Export ICS as array
