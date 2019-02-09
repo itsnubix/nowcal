@@ -22,6 +22,9 @@ $plain = NowCal::plain($props);
 
 
 // API available to also use non-statically
+
+$props = ['start' => 'October 5, 2019 6:03PM'];
+
 $event = (new NowCal($props))->start('October 5, 2019 6:03PM')
   ->summary('Daft Punk is playing')
   ->location('My House');
