@@ -33,7 +33,6 @@ $event->plain;
 
 ## Todo
 
-- Finish dynamic access
 - Support additional properties as outlined on (RFC 5545)[https://tools.ietf.org/html/rfc5545]
 - Build out ability to create and export tempfile for NowCal
 - Backfill with tests

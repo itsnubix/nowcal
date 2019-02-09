@@ -6,7 +6,7 @@ trait HasStaticAccessors
 {
     public static function build(array $props)
     {
-        return (new self($props))->compile();
+        return new self($props);
     }
 
     /**

@@ -58,6 +58,8 @@ trait HasMutators
      */
     public function getRawAttribute(): array
     {
+        $this->compile();
+
         return $this->output;
     }
 
@@ -68,6 +70,8 @@ trait HasMutators
      */
     public function getPlainAttribute(): string
     {
+        $this->compile();
+
         return implode(PHP_EOL, $this->output);
     }
 
@@ -78,6 +82,8 @@ trait HasMutators
      */
     public function getFileAttribute(): string
     {
+        $this->compile();
+
         return 'temp file';
     }
 }
