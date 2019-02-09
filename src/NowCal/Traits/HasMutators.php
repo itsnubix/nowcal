@@ -11,7 +11,7 @@ trait HasMutators
      *
      * @return array
      */
-    public function getEventParametersAttribute(): array
+    protected function getEventParametersAttribute(): array
     {
         return array_filter(
             array_merge($this->event, $this->allowed),
