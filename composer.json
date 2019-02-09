@@ -1,6 +1,6 @@
 {
   "name": "itsnubix/nowcal",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A modern PHP library for generating iCalendar v2.0 events",
   "keywords": [
     "icalendar",
