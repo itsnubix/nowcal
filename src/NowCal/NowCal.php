@@ -64,7 +64,7 @@ class NowCal
     /**
      * Compile the event's raw output.
      *
-     * @return NowCal
+     * @return \NowCal\NowCal
      */
     protected function compile()
     {
@@ -78,7 +78,7 @@ class NowCal
     }
 
     /**
-     * Open the VCalendar tag and necessary props.
+     * Open the VCalendar tag and add necessary props.
      */
     protected function beginCalendar()
     {
@@ -89,11 +89,17 @@ class NowCal
         }
     }
 
+    /**
+     * Close the VCalendar tag.
+     */
     protected function endCalendar()
     {
         $this->output[] = 'END:VCALENDAR';
     }
 
+    /**
+     * Create the VEvent and include all its props.
+     */
     protected function createEvent()
     {
         $this->output[] = 'BEGIN:VEVENT';
@@ -105,12 +111,18 @@ class NowCal
         $this->output[] = 'END:VEVENT';
     }
 
-    protected function endEvent()
-    {
-        $this->output[] = 'END:VEVENT';
-    }
-
-    protected function getParameter($key)
+    /**
+     * Get the provided parameter from the ICS spec. If not
+     * included in the spec then fail. If not provided but
+     * required then throw exception.
+     *
+     * @param string $key
+     *
+     * @throws Exception
+     *
+     * @return mixed
+     */
+    protected function getParameter(string $key)
     {
         if ($this->has($key)) {
             return $this->getParameterKey($key).':'.$this->getParameterValue($key);
@@ -121,7 +133,14 @@ class NowCal
         }
     }
 
-    protected function getParameterKey($name)
+    /**
+     * Returns the iCalendar param key.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getParameterKey(string $name): string
     {
         $key = Str::upper($name);
 
@@ -135,7 +154,14 @@ class NowCal
         }
     }
 
-    protected function getParameterValue($key)
+    /**
+     * Return the associated value for the supplied iCal param.
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    protected function getParameterValue(string $key): string
     {
         if ($this->has($key)) {
             if ($this->hasCaster($key)) {

@@ -4,6 +4,13 @@ namespace NowCal\Traits;
 
 trait HasStaticAccessors
 {
+    /**
+     * Pass the props into the class and build it.
+     *
+     * @param array $props
+     *
+     * @return \NowCal\NowCal
+     */
     public static function build(array $props)
     {
         return new self($props);
@@ -16,7 +23,7 @@ trait HasStaticAccessors
      *
      * @return array
      */
-    public static function raw(array $props)
+    public static function raw(array $props): array
     {
         return self::build($props)->raw;
     }
@@ -28,7 +35,7 @@ trait HasStaticAccessors
      *
      * @return string
      */
-    public static function plain(array $props)
+    public static function plain(array $props): string
     {
         return self::build($props)->plain;
     }

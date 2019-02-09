@@ -123,7 +123,7 @@ trait HasAttributes
      *
      * @param mixed $timestamp
      *
-     * @return NowCal
+     * @return \NowCal\NowCal
      */
     public function start($datetime): self
     {
@@ -137,7 +137,7 @@ trait HasAttributes
      *
      * @param mixed $timestamp
      *
-     * @return NowCal
+     * @return \NowCal\NowCal
      */
     public function end($datetime): self
     {
@@ -151,7 +151,7 @@ trait HasAttributes
      *
      * @param string $summary
      *
-     * @return NowCal
+     * @return \NowCal\NowCal
      */
     public function summary(string $summary): self
     {
@@ -165,7 +165,7 @@ trait HasAttributes
      *
      * @param string $location
      *
-     * @return NowCal
+     * @return \NowCal\NowCal
      */
     public function location(string $location): self
     {

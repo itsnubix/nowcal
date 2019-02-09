@@ -19,9 +19,9 @@ trait HasDateTimes
      * @param mixed  $timestamp
      * @param string $format
      *
-     * @return DateTime
+     * @return string
      */
-    protected function createDateTime($datetime = null)
+    protected function createDateTime($datetime = null): string
     {
         return ($datetime ? Carbon::parse($datetime) : Carbon::now())->format($this->datetime_format);
     }

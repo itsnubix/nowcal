@@ -5,7 +5,7 @@ namespace NowCal\Traits;
 trait HasCasters
 {
     /**
-     * Undocumented variable.
+     * All the properties that need to be cast.
      *
      * @var array
      */
@@ -23,7 +23,15 @@ trait HasCasters
      */
     protected $datetime_format = 'Ymd\THis\Z';
 
-    protected function cast($value, $as)
+    /**
+     * Cast the specified value as the provided type.
+     *
+     * @param mixed       $value
+     * @param string|null $as
+     *
+     * @return mixed
+     */
+    protected function cast($value, ?string $as = null)
     {
         switch ($as) {
             case 'datetime':
@@ -33,12 +41,26 @@ trait HasCasters
         }
     }
 
+    /**
+     * Cast the specified value as a datetime.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
     protected function castDateTime($value): string
     {
         return $this->createDateTime($value);
     }
 
-    protected function hasCaster($key): bool
+    /**
+     * Check if the specified key has a caster.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    protected function hasCaster(string $key): bool
     {
         return array_key_exists($key, $this->casts);
     }
