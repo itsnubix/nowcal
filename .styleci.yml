@@ -1,1 +1,6 @@
 preset: symfony
+
+enabled:
+  - concat_space
+  - no_unused_imports
+  - method_argument_space
