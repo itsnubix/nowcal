@@ -1,4 +1,1 @@
 preset: symfony
-
-enabled:
-  - method_argument_space
