@@ -1,7 +1,10 @@
 # NowCal
 
+[![Latest version on Packagist](https://img.shields.io/packagist/v/itsnubix/nowcal.svg?style=flat-square)](https://packagist.org/packages/itsnubix/nowcal)
 [![Build Status](https://travis-ci.org/itsnubix/nowcal.svg?branch=master)](https://travis-ci.org/itsnubix/nowcal)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![StyleCI](https://github.styleci.io/repos/169808234/shield?branch=master)](https://github.styleci.io/repos/169808234)
+[![Total Downloads](https://img.shields.io/packagist/dt/itsnubix/nowcal.svg?style=flat-square)](https://packagist.org/packages/itsnubix/nowcal)
 
 A modern PHP library for generating iCalendar v2.0 events.
 
