@@ -16,7 +16,7 @@ Install with composer using `composer require itsnubix/nowcal`
 ```php
 use NowCal\NowCal;
 
-$event = NowCal::build(['start' => 'October 5, 2019 6:03PM']))
+$event = NowCal::create(['start' => 'October 5, 2019 6:03PM']))
   ->summary('Daft Punk is playing')
   ->location('My House');
 ```
@@ -45,7 +45,7 @@ $props = [
 ];
 
 // Creates a NowCal instance
-$nowcal = new NowCal($props); // or NowCal::build($props);
+$nowcal = new NowCal($props); // or NowCal::create($props);
 
 // Exports a raw output array
 $nowcal->raw; // or NowCal::raw($props)

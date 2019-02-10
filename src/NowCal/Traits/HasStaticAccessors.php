@@ -5,9 +5,23 @@ namespace NowCal\Traits;
 trait HasStaticAccessors
 {
     /**
+     * Pass the props into the class and create a new instance.
+     *
+     * @param array $props
+     *
+     * @return \NowCal\NowCal
+     */
+    public static function create(array $props = [])
+    {
+        return new self($props);
+    }
+
+    /**
      * Pass the props into the class and build it.
      *
      * @param array $props
+     *
+     * @deprecated 1.0.0 Prefer "create" syntax
      *
      * @return \NowCal\NowCal
      */
@@ -25,7 +39,7 @@ trait HasStaticAccessors
      */
     public static function raw(array $props = []): array
     {
-        return self::build($props)->raw;
+        return self::create($props)->raw;
     }
 
     /**
@@ -37,7 +51,7 @@ trait HasStaticAccessors
      */
     public static function plain(array $props = []): string
     {
-        return self::build($props)->plain;
+        return self::create($props)->plain;
     }
 
     /**
@@ -49,6 +63,6 @@ trait HasStaticAccessors
      */
     public static function file(array $props = []): string
     {
-        return self::build($props)->file;
+        return self::create($props)->file;
     }
 }
