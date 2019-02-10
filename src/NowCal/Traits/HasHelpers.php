@@ -24,7 +24,6 @@ trait HasHelpers
      * Set the class' properties.
      *
      * @param string|array $key
-     * @param mixed        $val
      */
     protected function set($key, $val = null)
     {

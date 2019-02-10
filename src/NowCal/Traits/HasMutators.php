@@ -3,9 +3,29 @@
 namespace NowCal\Traits;
 
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 trait HasMutators
 {
+    /**
+     * CRLF return.
+     *
+     * @var string
+     */
+    protected static $crlf = "\r\n";
+
+    /**
+     * Magic method for getting computed properties.
+     *
+     * @param string $name
+     */
+    public function __get(string $key)
+    {
+        if (method_exists(self::class, $method = 'get'.Str::studly($key).'Attribute')) {
+            return $this->{$method}();
+        }
+    }
+
     /**
      * Concatenate the invite's parameters.
      *
@@ -72,7 +92,7 @@ trait HasMutators
     {
         $this->compile();
 
-        return implode(PHP_EOL, $this->output);
+        return implode(self::$crlf, $this->output);
     }
 
     /**
@@ -82,8 +102,14 @@ trait HasMutators
      */
     public function getFileAttribute(): string
     {
-        $this->compile();
+        $filename = tempnam(sys_get_temp_dir(), 'event_').'.ics';
+        file_put_contents($filename, $this->plain.self::$crlf);
 
-        return 'temp file';
+        return $filename;
+    }
+
+    protected function getFileNameAttribute()
+    {
+        return $this->uid.'_event.ics';
     }
 }

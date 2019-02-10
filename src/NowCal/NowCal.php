@@ -6,11 +6,11 @@ use Illuminate\Support\Str;
 
 class NowCal
 {
-    use Traits\HasAttributes,
-        Traits\HasCasters,
-        Traits\HasDateTimes,
+    use Traits\HasCasters,
         Traits\HasHelpers,
         Traits\HasMutators,
+        Traits\HasDateTimes,
+        Traits\HasAttributes,
         Traits\HasStaticAccessors;
 
     /**
@@ -47,18 +47,6 @@ class NowCal
     public function __construct(array $params = [])
     {
         $this->merge($params);
-    }
-
-    /**
-     * Magic method for getting computed properties.
-     *
-     * @param string $name
-     */
-    public function __get(string $key)
-    {
-        if (method_exists(self::class, $method = 'get'.Str::studly($key).'Attribute')) {
-            return $this->{$method}();
-        }
     }
 
     /**
@@ -120,9 +108,9 @@ class NowCal
      *
      * @throws Exception
      *
-     * @return mixed
+     * @return string
      */
-    protected function getParameter(string $key)
+    protected function getParameter(string $key): string
     {
         if ($this->has($key)) {
             return $this->getParameterKey($key).':'.$this->getParameterValue($key);
@@ -144,7 +132,7 @@ class NowCal
     {
         $key = Str::upper($name);
 
-        switch ($key) {
+        switch ($name) {
             case 'start':
             case 'end':
             case 'stamp':

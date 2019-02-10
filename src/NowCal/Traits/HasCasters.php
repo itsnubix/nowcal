@@ -17,13 +17,6 @@ trait HasCasters
     ];
 
     /**
-     * The format to use for casting of datetimes.
-     *
-     * @var string
-     */
-    protected $datetime_format = 'Ymd\THis\Z';
-
-    /**
      * Cast the specified value as the provided type.
      *
      * @param mixed       $value

@@ -40,7 +40,14 @@ trait HasStaticAccessors
         return self::build($props)->plain;
     }
 
-    public static function file(array $props)
+    /**
+     * Return a path to a .ics tempfile.
+     *
+     * @param array $props
+     *
+     * @return string
+     */
+    public static function file(array $props): string
     {
         return self::build($props)->file;
     }

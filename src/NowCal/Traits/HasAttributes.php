@@ -23,6 +23,7 @@ trait HasAttributes
         'uid',
         'created',
         'stamp',
+        'start',
     ];
 
     /**
