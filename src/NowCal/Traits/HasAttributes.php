@@ -23,7 +23,6 @@ trait HasAttributes
         'uid',
         'created',
         'stamp',
-        'start',
     ];
 
     /**
@@ -50,10 +49,10 @@ trait HasAttributes
     protected $required = [
         'prodid',
         'version',
-        'start',
         'uid',
         'created',
         'stamp',
+        'start',
     ];
 
     /**
@@ -63,7 +62,7 @@ trait HasAttributes
      *
      * @var string
      */
-    protected $start;
+    public $start;
 
     /**
      * This property specifies the date and time that a calendar
@@ -73,7 +72,7 @@ trait HasAttributes
      *
      * @var string
      */
-    protected $end;
+    public $end;
 
     /**
      * This property defines a short summary or subject for the
@@ -83,7 +82,7 @@ trait HasAttributes
      *
      * @var string
      */
-    protected $summary;
+    public $summary;
 
     /**
      * This property defines the intended venue for the activity
@@ -93,7 +92,7 @@ trait HasAttributes
      *
      * @var string
      */
-    protected $location;
+    public $location;
 
     /**
      * Check if the key is allowed to be set.
@@ -128,7 +127,7 @@ trait HasAttributes
      */
     public function start($datetime): self
     {
-        $this->set('start', $this->createDateTime($datetime));
+        $this->set('start', $datetime);
 
         return $this;
     }
@@ -142,7 +141,7 @@ trait HasAttributes
      */
     public function end($datetime): self
     {
-        $this->set('end', $this->createDateTime($datetime));
+        $this->set('end', $datetime);
 
         return $this;
     }

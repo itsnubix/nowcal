@@ -115,7 +115,6 @@ class NowCal
         if ($this->has($key)) {
             return $this->getParameterKey($key).':'.$this->getParameterValue($key);
         }
-
         if ($this->required($key)) {
             throw new \Exception('Key "'.$key.'" is not set but is required');
         }
