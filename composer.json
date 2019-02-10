@@ -11,6 +11,12 @@
     "issues": "https://github.com/itsnubix/nowcal/issues",
     "source": "https://github.com/itsnubix/nowcal"
   },
+  "require": {
+    "php": "^7.1.8",
+    "illuminate/support": "^5.7",
+    "nesbot/carbon": "^1.33",
+    "ramsey/uuid": "^3.8"
+  },
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -20,14 +26,14 @@
     }
   ],
   "minimum-stability": "dev",
-  "require": {
-    "illuminate/support": "^5.7",
-    "nesbot/carbon": "^1.33",
-    "ramsey/uuid": "^3.8"
-  },
   "autoload": {
     "psr-4": {
       "NowCal\\": "src/NowCal/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
     }
   }
 }

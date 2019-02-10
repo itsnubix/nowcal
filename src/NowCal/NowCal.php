@@ -113,11 +113,11 @@ class NowCal
     protected function getParameter(string $key): string
     {
         if ($this->has($key)) {
-            return $this->getParameterKey($key).':'.$this->getParameterValue($key);
+            return $this->getParameterKey($key) . ':' . $this->getParameterValue($key);
         }
 
         if ($this->required($key)) {
-            throw new \Exception('Key "'.$key.'" is not set but is required');
+            throw new \Exception('Key "' . $key . '" is not set but is required');
         }
     }
 
@@ -136,7 +136,7 @@ class NowCal
             case 'start':
             case 'end':
             case 'stamp':
-                return 'DT'.$key;
+                return 'DT' . $key;
             default:
                 return $key;
         }
