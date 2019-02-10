@@ -1,5 +1,6 @@
 # NowCal
 
+[![Build Status](https://travis-ci.org/itsnubix/nowcal.svg?branch=master)](https://travis-ci.org/itsnubix/nowcal)
 [![StyleCI](https://github.styleci.io/repos/169808234/shield?branch=master)](https://github.styleci.io/repos/169808234)
 
 A modern PHP library for generating iCalendar v2.0 events.
