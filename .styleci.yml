@@ -1,5 +1,4 @@
 preset: symfony
 
 enabled:
-  - no_unused_imports
   - method_argument_space
