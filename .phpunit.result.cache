@@ -1,1 +1,0 @@
-C:30:"PHPUnit\Runner\TestResultCache":148:{a:2:{s:7:"defects";a:1:{s:38:"Tests\NowCal\NowCalTest::it_has_a_test";i:3;}s:5:"times";a:1:{s:38:"Tests\NowCal\NowCalTest::it_has_a_test";d:0.005;}}}
