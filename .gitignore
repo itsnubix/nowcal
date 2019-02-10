@@ -11,3 +11,4 @@ coverage.xml
 .php_cs.cache
 composer.lock
 composer.phar
+.phpunit.result.cache
