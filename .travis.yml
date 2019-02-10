@@ -1,0 +1,12 @@
+language: php
+
+cache:
+  apt: true
+  directories:
+    - $HOME/.composer/cache
+
+sudo: false
+
+before_script: composer update
+
+script: vendor/bin/phpunit
