@@ -23,4 +23,16 @@ class StartAttributeTest extends TestCase
 
         $this->assertStringContainsString(Carbon::parse($time)->format($format), $this->nowcal->plain);
     }
+
+    /** @test */
+    public function it_can_take_a_callback_as_a_value()
+    {
+        $time = 'now';
+
+        $this->nowcal->start(function () use ($time) {
+            return $time;
+        });
+
+        $this->assertEquals($time, $this->nowcal->start);
+    }
 }

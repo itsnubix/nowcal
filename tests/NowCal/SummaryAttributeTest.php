@@ -21,4 +21,16 @@ class SummaryAttributeTest extends TestCase
 
         $this->assertStringContainsString($summary, $this->nowcal->plain);
     }
+
+    /** @test */
+    public function it_can_take_a_callback_as_a_value()
+    {
+        $summary = 'my event';
+
+        $this->nowcal->summary(function () use ($summary) {
+            return $summary;
+        });
+
+        $this->assertEquals($summary, $this->nowcal->summary);
+    }
 }

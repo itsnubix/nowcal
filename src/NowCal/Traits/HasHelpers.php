@@ -24,12 +24,17 @@ trait HasHelpers
      * Set the class' properties.
      *
      * @param string|array $key
+     * @param mixed        $val
      */
     protected function set($key, $val = null)
     {
         if (is_array($key)) {
             $this->merge($key);
         } else {
+            if (is_callable($val)) {
+                $val = $val();
+            }
+
             if ($this->allowed($key)) {
                 $this->{$key} = $val;
             }

@@ -21,4 +21,16 @@ class LocationAttributeTest extends TestCase
 
         $this->assertStringContainsString($location, $this->nowcal->plain);
     }
+
+    /** @test */
+    public function it_can_take_a_callback_as_a_value()
+    {
+        $location = 'here';
+
+        $this->nowcal->location(function () use ($location) {
+            return $location;
+        });
+
+        $this->assertEquals($location, $this->nowcal->location);
+    }
 }
