@@ -149,11 +149,11 @@ trait HasAttributes
     /**
      * Set the event's summary.
      *
-     * @param string $summary
+     * @param mixed $summary
      *
      * @return \NowCal\NowCal
      */
-    public function summary(string $summary): self
+    public function summary($summary): self
     {
         $this->set('summary', $summary);
 
@@ -163,11 +163,11 @@ trait HasAttributes
     /**
      * Set the even'ts location.
      *
-     * @param string $location
+     * @param mixed $location
      *
      * @return \NowCal\NowCal
      */
-    public function location(string $location): self
+    public function location($location): self
     {
         $this->set('location', $location);
 
