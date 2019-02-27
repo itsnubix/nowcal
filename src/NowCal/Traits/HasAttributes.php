@@ -142,7 +142,9 @@ trait HasAttributes
      */
     public function end($datetime): self
     {
-        $this->set('end', $datetime);
+        if (null === $this->duration) {
+            $this->set('end', $datetime);
+        }
 
         return $this;
     }
@@ -176,7 +178,7 @@ trait HasAttributes
     }
 
     /**
-     * Set the event's duration.
+     * Set the event's duration using a CarbonInterval parsable string.
      *
      * @param mixed $location'
      *
@@ -184,7 +186,9 @@ trait HasAttributes
      */
     public function duration($duration): self
     {
-        $this->set('duration', $duration);
+        if (null === $this->end) {
+            $this->set('duration', $duration);
+        }
 
         return $this;
     }

@@ -15,4 +15,9 @@ abstract class TestCase extends BaseTestCase
 
         $this->nowcal = new NowCal([]);
     }
+
+    protected function createNowCalInstance()
+    {
+        return new Nowcal([]);
+    }
 }

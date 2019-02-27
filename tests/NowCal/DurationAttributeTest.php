@@ -19,7 +19,6 @@ class DurationAttributeTest extends TestCase
     public function it_casts_end_as_an_iso_duration()
     {
         $this->nowcal->duration($duration = '1h');
-        var_dump($this->nowcal->plain);
 
         $this->assertStringContainsString(CarbonInterval::fromString($duration)->spec(), $this->nowcal->plain);
     }
@@ -39,5 +38,20 @@ class DurationAttributeTest extends TestCase
     /** @test */
     public function it_cannot_have_both_an_end_and_duration()
     {
+        $duration = '1h';
+        $end = 'now';
+
+        $this->nowcal->duration($duration)
+            ->end($end);
+
+        $this->assertEquals(null, $this->nowcal->end);
+        $this->assertEquals($duration, $this->nowcal->duration);
+
+        $this->nowcal = $this->createNowCalInstance();
+        $this->nowcal->end($end)
+            ->duration($duration);
+
+        $this->assertEquals(null, $this->nowcal->duration);
+        $this->assertEquals($end, $this->nowcal->end);
     }
 }

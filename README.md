@@ -27,14 +27,15 @@ $event = NowCal::create(['start' => 'October 5, 2019 6:03PM']))
 
 ### Properties
 
-The following properties can be get/set on the NowCal instance. Users should take advantage of the setting property helpers in the class, i.e.: `$nowcal->location('Event Location');` as they provide a nice syntax to string multiple calls together.
+The following properties can be get/set on the NowCal instance. Users can take advantage of the set property helpers in the class, i.e.: `$nowcal->location('Event Location');` as they provide a nice syntax to string multiple calls together and support callbacks if necessary.
 
-| Property | Type   | Description                                           |
-| -------- | ------ | ----------------------------------------------------- |
-| start    | string | A DateTime compatible string that is parsed by Carbon |
-| end      | string | A DateTime compatible string that is parsed by Carbon |
-| summary  | string | A short description of the event                      |
-| location | string | The location where the event is taking place          |
+| Property | Description                                                                                            |
+| -------- | ------------------------------------------------------------------------------------------------------ |
+| start    | A string parseable by Carbon                                                                           |
+| end      | A string parseable by Carbon, as per RFC 5545, only an end value or duration value may be used         |
+| duration | A string parseable by CarbonInterval, as per RFC 5545, only an end value or duration value may be used |
+| summary  | A short description of the event                                                                       |
+| location | The location where the event is taking place                                                           |
 
 ### Methods
 
