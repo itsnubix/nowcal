@@ -142,7 +142,7 @@ trait HasAttributes
      */
     public function end($datetime): self
     {
-        if (null === $this->duration) {
+        if (!$this->has('duration')) {
             $this->set('end', $datetime);
         }
 
@@ -186,7 +186,7 @@ trait HasAttributes
      */
     public function duration($duration): self
     {
-        if (null === $this->end) {
+        if (!$this->has('end')) {
             $this->set('duration', $duration);
         }
 

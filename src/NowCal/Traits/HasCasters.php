@@ -10,7 +10,7 @@ trait HasCasters
      * @var array
      */
     protected $casts = [
-        'duration' => 'duration',
+        'duration' => 'interval',
         'created' => 'datetime',
         'stamp' => 'datetime',
         'start' => 'datetime',
@@ -30,8 +30,8 @@ trait HasCasters
         switch ($as) {
             case 'datetime':
                 return $this->castDateTime($value);
-            case 'duration':
-                return $this->castDuration($value);
+            case 'interval':
+                return $this->castInterval($value);
             default:
                 return $value;
         }
@@ -44,21 +44,21 @@ trait HasCasters
      *
      * @return string
      */
-    protected function castDateTime($value): string
+    protected function castDateTime($value)
     {
         return $this->createDateTime($value);
     }
 
     /**
-     * Cast the specified value as an ISO 8601.2004 duration.
+     * Cast the specified value as an ISO 8601.2004 interval.
      *
      * @param mixed $value
      *
      * @return string
      */
-    protected function castDuration($value): string
+    protected function castInterval($value)
     {
-        return $this->createDuration($value);
+        return $this->createInterval($value);
     }
 
     /**

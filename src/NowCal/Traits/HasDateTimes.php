@@ -28,15 +28,15 @@ trait HasDateTimes
     }
 
     /**
-     * Parses and creates an ISO 8601.2004 duration.
+     * Parses and creates an ISO 8601.2004 interval.
      *
-     * @param mixed $duration
+     * @param mixed $interval
      *
      * @return string
      */
-    protected function createDuration($duration = null): string
+    protected function createInterval($interval = null): string
     {
-        return CarbonInterval::fromString($duration ?? '0s')
+        return CarbonInterval::fromString($interval ?? '0s')
             ->spec();
     }
 }
