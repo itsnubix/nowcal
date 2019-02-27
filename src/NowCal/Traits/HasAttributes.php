@@ -39,6 +39,7 @@ trait HasAttributes
         'end',
         'summary',
         'location',
+        'duration',
     ];
 
     /**
@@ -161,7 +162,7 @@ trait HasAttributes
     }
 
     /**
-     * Set the even'ts location.
+     * Set the event's location.
      *
      * @param mixed $location
      *
@@ -170,6 +171,20 @@ trait HasAttributes
     public function location($location): self
     {
         $this->set('location', $location);
+
+        return $this;
+    }
+
+    /**
+     * Set the event's duration.
+     *
+     * @param mixed $location'
+     *
+     * @return \NowCal\NowCal
+     */
+    public function duration($duration): self
+    {
+        $this->set('duration', $duration);
 
         return $this;
     }
