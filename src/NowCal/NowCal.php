@@ -6,12 +6,12 @@ use Illuminate\Support\Str;
 
 class NowCal
 {
-    use Traits\HasCasters,
-        Traits\HasHelpers,
-        Traits\HasMutators,
-        Traits\HasDateTimes,
-        Traits\HasAttributes,
-        Traits\HasStaticAccessors;
+    use Traits\HasCasters;
+    use Traits\HasHelpers;
+    use Traits\HasMutators;
+    use Traits\HasDateTimes;
+    use Traits\HasAttributes;
+    use Traits\HasStaticAccessors;
 
     /**
      * iCalendar Product Identifier.
@@ -41,8 +41,6 @@ class NowCal
 
     /**
      * Instantiate the NowCal class.
-     *
-     * @param array $params
      */
     public function __construct(array $params = [])
     {
@@ -104,11 +102,7 @@ class NowCal
      * included in the spec then fail. If not provided but
      * required then throw exception.
      *
-     * @param string $key
-     *
      * @throws Exception
-     *
-     * @return string
      */
     protected function getParameter(string $key): string
     {
@@ -122,10 +116,6 @@ class NowCal
 
     /**
      * Returns the iCalendar param key.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getParameterKey(string $name): string
     {
@@ -143,10 +133,6 @@ class NowCal
 
     /**
      * Return the associated value for the supplied iCal param.
-     *
-     * @param string $key
-     *
-     * @return string
      */
     protected function getParameterValue(string $key): string
     {
