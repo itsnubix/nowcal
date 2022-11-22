@@ -1,6 +1,6 @@
 {
   "name": "itsnubix/nowcal",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A modern PHP library for generating iCalendar v2.0 events",
   "keywords": [
     "icalendar",
@@ -15,7 +15,7 @@
     "php": "^7.1.8|^8.0",
     "illuminate/support": "~5.8.0|^6.0|^7.0|^8.0|^9.0",
     "nesbot/carbon": "^2.29.1",
-    "ramsey/uuid": "^3.8"
+    "ramsey/uuid": "^3.8|^4.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.14",
