@@ -60,57 +60,43 @@ trait HasAttributes
      * This property specifies when the calendar component begins.
      *
      * @see https://tools.ietf.org/html/rfc5545#section-3.8.2.4
-     *
-     * @var string
      */
-    public $start;
+    public ?string $start = null;
 
     /**
      * This property specifies the date and time that a calendar
      * component ends.
      *
      * @see https://tools.ietf.org/html/rfc5545#section-3.8.2.2
-     *
-     * @var string
      */
-    public $end;
+    public ?string $end = null;
 
     /**
      * The duration is a interval coded string (ie, P28DT6H42M12S = 28 days, 6 hours, 42 minutes, 12 seconds)
      * that specifies the duration of the event.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.6
-     *
-     * @var string
      */
-    public $duration;
+    public ?string $duration = null;
 
     /**
      * This property defines a short summary or subject for the
      * calendar component.
      *
      * @see https://tools.ietf.org/html/rfc5545#section-3.8.1.12
-     *
-     * @var string
      */
-    public $summary;
+    public ?string $summary = null;
 
     /**
      * This property defines the intended venue for the activity
      * defined by a calendar component.
      *
      * @see https://tools.ietf.org/html/rfc5545#section-3.8.1.7
-     *
-     * @var string
      */
-    public $location;
+    public ?string $location = null;
 
     /**
      * Check if the key is allowed to be set.
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     protected function allowed(string $key): bool
     {
@@ -119,10 +105,6 @@ trait HasAttributes
 
     /**
      * Check if the key is required.
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     protected function required(string $key): bool
     {
@@ -131,12 +113,8 @@ trait HasAttributes
 
     /**
      * Set the event's start date.
-     *
-     * @param mixed $timestamp
-     *
-     * @return \NowCal\NowCal
      */
-    public function start($datetime): self
+    public function start(string|\Closure|\DateTime $datetime): self
     {
         $this->set('start', $datetime);
 
@@ -145,12 +123,8 @@ trait HasAttributes
 
     /**
      * Set the event's end date.
-     *
-     * @param mixed $timestamp
-     *
-     * @return \NowCal\NowCal
      */
-    public function end($datetime): self
+    public function end(string|\Closure|\DateTime $datetime): self
     {
         if (!$this->has('duration')) {
             $this->set('end', $datetime);
@@ -161,12 +135,8 @@ trait HasAttributes
 
     /**
      * Set the event's summary.
-     *
-     * @param mixed $summary
-     *
-     * @return \NowCal\NowCal
      */
-    public function summary($summary): self
+    public function summary(string|\Closure $summary): self
     {
         $this->set('summary', $summary);
 
@@ -175,12 +145,8 @@ trait HasAttributes
 
     /**
      * Set the event's location.
-     *
-     * @param mixed $location
-     *
-     * @return \NowCal\NowCal
      */
-    public function location($location): self
+    public function location(string|\Closure $location): self
     {
         $this->set('location', $location);
 
@@ -188,18 +154,62 @@ trait HasAttributes
     }
 
     /**
-     * Set the event's duration using a CarbonInterval parsable string.
-     *
-     * @param mixed $location'
-     *
-     * @return \NowCal\NowCal
+     * Set the event's duration using a DateInterval.
      */
-    public function duration($duration): self
+    public function duration(string|\Closure $duration): self
     {
         if (!$this->has('end')) {
             $this->set('duration', $duration);
         }
 
         return $this;
+    }
+
+    /**
+     * Get the class' property.
+     */
+    protected function get(string $key): mixed
+    {
+        if ($this->allowed($key)) {
+            return $this->{$key};
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the class' properties.
+     */
+    protected function set(string|array $key, $val = null): void
+    {
+        if (is_array($key)) {
+            $this->merge($key);
+        } else {
+            if (is_callable($val)) {
+                $val = $val();
+            }
+
+            if ($this->allowed($key)) {
+                $this->{$key} = $val;
+            }
+        }
+    }
+
+    /**
+     * Check if the class has a key.
+     */
+    protected function has(string $key): bool
+    {
+        return isset($this->{$key}) && !is_null($this->{$key});
+    }
+
+    /**
+     * Merge multiple properties.
+     */
+    protected function merge(array $props)
+    {
+        foreach ($props as $key => $val) {
+            $this->set($key, $val);
+        }
     }
 }

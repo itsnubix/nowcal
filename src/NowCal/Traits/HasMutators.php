@@ -16,10 +16,8 @@ trait HasMutators
 
     /**
      * Magic method for getting computed properties.
-     *
-     * @param string $name
      */
-    public function __get(string $key)
+    public function __get(string $key): mixed
     {
         if (method_exists(self::class, $method = 'get' . $this->convertStringToPascalCase($key) . 'Attribute')) {
             return $this->{$method}();
@@ -28,8 +26,6 @@ trait HasMutators
 
     /**
      * Concatenate the invite's parameters.
-     *
-     * @return array
      */
     protected function getEventParametersAttribute(): array
     {
@@ -43,8 +39,6 @@ trait HasMutators
 
     /**
      * Create and return a UUID.
-     *
-     * @return string
      */
     protected function getUidAttribute(): string
     {
@@ -53,8 +47,6 @@ trait HasMutators
 
     /**
      * Create and return a timestamp.
-     *
-     * @return string
      */
     protected function getStampAttribute(): string
     {
@@ -63,8 +55,6 @@ trait HasMutators
 
     /**
      * Create and return the created at timestamp.
-     *
-     * @return string
      */
     protected function getCreatedAttribute(): string
     {
@@ -73,8 +63,6 @@ trait HasMutators
 
     /**
      * Return the invite's raw output array.
-     *
-     * @return array
      */
     public function getRawAttribute(): array
     {
@@ -85,8 +73,6 @@ trait HasMutators
 
     /**
      * Return the invite's data as plain text.
-     *
-     * @return string
      */
     public function getPlainAttribute(): string
     {
@@ -97,8 +83,6 @@ trait HasMutators
 
     /**
      * Creates a tempfile and returns its path.
-     *
-     * @return string
      */
     public function getFileAttribute(): string
     {
@@ -108,11 +92,17 @@ trait HasMutators
         return $filename;
     }
 
-    protected function getFileNameAttribute()
+    /**
+     * Return the file name.
+     */
+    protected function getFileNameAttribute(): string
     {
         return $this->uid . '_event.ics';
     }
 
+    /**
+     * Converts a string into PascalCase.
+     */
     protected function convertStringToPascalCase(string $string): string
     {
         $words = explode(' ', str_replace(['-', '_'], ' ', $string));

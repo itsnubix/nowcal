@@ -2,8 +2,8 @@
 
 namespace NowCal\Traits;
 
-use DateInterval;
 use DateTime;
+use DateInterval;
 
 trait HasDateTimes
 {
@@ -16,12 +16,8 @@ trait HasDateTimes
 
     /**
      * Parses and creates a datetime.
-     *
-     * @param mixed $timestamp
-     *
-     * @return string
      */
-    protected function createDateTime($datetime = 'now'): string
+    protected function createDateTime(string|DateTime|\Closure $datetime = 'now'): string
     {
         return (new DateTime($datetime ?? 'now'))
             ->format($this->datetime_format);
@@ -29,17 +25,18 @@ trait HasDateTimes
 
     /**
      * Parses and creates an ISO 8601.2004 interval.
-     *
-     * @param mixed $interval
-     *
-     * @return string
      */
     protected function createInterval(string $interval = '0s'): string
     {
         return $this->transformDateIntervalToString($this->createDateIntervalFromString($interval));
     }
 
-    public function createDateIntervalFromString(string $string)
+    /**
+     * Convert a string to a DateInterval
+     *
+     * @example '1y 2M 3w 4d 5h 6m 7s'
+     */
+    protected function createDateIntervalFromString(string $string): DateInterval
     {
         $years = 0;
         $months = 0;
@@ -86,7 +83,7 @@ trait HasDateTimes
         );
     }
 
-    protected function transformDateIntervalToString(DateInterval $interval)
+    protected function transformDateIntervalToString(DateInterval $interval): string
     {
         // Reading all non-zero date parts.
         $date = array_filter(array(
