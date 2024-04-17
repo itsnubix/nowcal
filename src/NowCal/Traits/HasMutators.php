@@ -21,7 +21,7 @@ trait HasMutators
      */
     public function __get(string $key)
     {
-        if (method_exists(self::class, $method = 'get'.Str::studly($key).'Attribute')) {
+        if (method_exists(self::class, $method = 'get' . $this->convertStringToPascalCase($key) . 'Attribute')) {
             return $this->{$method}();
         }
     }
@@ -37,7 +37,7 @@ trait HasMutators
             array_merge($this->event, $this->allowed),
             function ($key) {
                 return $this->has($key);
-            }
+            },
         );
     }
 
@@ -102,14 +102,22 @@ trait HasMutators
      */
     public function getFileAttribute(): string
     {
-        $filename = tempnam(sys_get_temp_dir(), 'event_').'.ics';
-        file_put_contents($filename, $this->plain.self::$crlf);
+        $filename = tempnam(sys_get_temp_dir(), 'event_') . '.ics';
+        file_put_contents($filename, $this->plain . self::$crlf);
 
         return $filename;
     }
 
     protected function getFileNameAttribute()
     {
-        return $this->uid.'_event.ics';
+        return $this->uid . '_event.ics';
+    }
+
+    protected function convertStringToPascalCase(string $string): string
+    {
+        $words = explode(' ', str_replace(['-', '_'], ' ', $string));
+        $output = array_map(fn($word) => ucfirst($word), $words);
+
+        return implode($output);
     }
 }

@@ -76,6 +76,16 @@ trait HasAttributes
     public $end;
 
     /**
+     * The duration is a interval coded string (ie, P28DT6H42M12S = 28 days, 6 hours, 42 minutes, 12 seconds)
+     * that specifies the duration of the event.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.3.6
+     *
+     * @var string
+     */
+    public $duration;
+
+    /**
      * This property defines a short summary or subject for the
      * calendar component.
      *

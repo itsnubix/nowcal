@@ -2,7 +2,7 @@
 
 namespace Tests\NowCal;
 
-use Carbon\Carbon;
+use DateTime;
 use Tests\TestCase;
 
 class StartAttributeTest extends TestCase
@@ -21,7 +21,7 @@ class StartAttributeTest extends TestCase
         $this->nowcal->start($time = 'October 5, 2019 6:03PM');
         $format = 'Ymd\THis\Z';
 
-        $this->assertStringContainsString(Carbon::parse($time)->format($format), $this->nowcal->plain);
+        $this->assertStringContainsString((new DateTime($time))->format($format), $this->nowcal->plain);
     }
 
     /** @test */

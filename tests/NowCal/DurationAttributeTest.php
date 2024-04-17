@@ -3,7 +3,6 @@
 namespace Tests\NowCal;
 
 use Tests\TestCase;
-use Carbon\CarbonInterval;
 
 class DurationAttributeTest extends TestCase
 {
@@ -20,7 +19,7 @@ class DurationAttributeTest extends TestCase
     {
         $this->nowcal->duration($duration = '1h');
 
-        $this->assertStringContainsString(CarbonInterval::fromString($duration)->spec(), $this->nowcal->plain);
+        $this->assertStringContainsString('PT1H', $this->nowcal->plain);
     }
 
     /** @test */
