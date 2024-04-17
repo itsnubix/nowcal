@@ -19,13 +19,8 @@ trait HasCasters
 
     /**
      * Cast the specified value as the provided type.
-     *
-     * @param mixed       $value
-     * @param string|null $as
-     *
-     * @return mixed
      */
-    protected function cast($value, ?string $as = null)
+    protected function cast(mixed $value, ?string $as = null): string
     {
         switch ($as) {
             case 'datetime':
@@ -39,34 +34,22 @@ trait HasCasters
 
     /**
      * Cast the specified value as a datetime.
-     *
-     * @param mixed $value
-     *
-     * @return string
      */
-    protected function castDateTime($value)
+    protected function castDateTime($value): string
     {
         return $this->createDateTime($value);
     }
 
     /**
      * Cast the specified value as an ISO 8601.2004 interval.
-     *
-     * @param mixed $value
-     *
-     * @return string
      */
-    protected function castInterval($value)
+    protected function castInterval(mixed $value): string
     {
         return $this->createInterval($value);
     }
 
     /**
      * Check if the specified key has a caster.
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     protected function hasCaster(string $key): bool
     {

@@ -5,7 +5,6 @@ namespace NowCal;
 class NowCal
 {
     use Traits\HasCasters;
-    use Traits\HasHelpers;
     use Traits\HasMutators;
     use Traits\HasDateTimes;
     use Traits\HasAttributes;
@@ -15,27 +14,21 @@ class NowCal
      * iCalendar Product Identifier.
      *
      * @see https://tools.ietf.org/html/rfc5545#section-3.7.3
-     *
-     * @var string
      */
-    private $prodid = '-//itsnubix//NowCal//EN';
+    private string $prodid = '-//itsnubix//NowCal//EN';
 
     /**
      * Specifies the minimum iCalendar specification that is required
      * in order to interpret the iCalendar object.
      *
      * @see https://tools.ietf.org/html/rfc5545#section-3.7.4
-     *
-     * @var string
      */
-    protected $version = '2.0';
+    protected string $version = '2.0';
 
     /**
      * The .ics raw array output.
-     *
-     * @var array
      */
-    protected $output = [];
+    protected array $output = [];
 
     /**
      * Instantiate the NowCal class.
@@ -47,10 +40,8 @@ class NowCal
 
     /**
      * Compile the event's raw output.
-     *
-     * @return \NowCal\NowCal
      */
-    protected function compile()
+    protected function compile(): self
     {
         $this->output = [];
 
@@ -64,7 +55,7 @@ class NowCal
     /**
      * Open the VCalendar tag and add necessary props.
      */
-    protected function beginCalendar()
+    protected function beginCalendar(): void
     {
         $this->output[] = 'BEGIN:VCALENDAR';
 
@@ -76,7 +67,7 @@ class NowCal
     /**
      * Close the VCalendar tag.
      */
-    protected function endCalendar()
+    protected function endCalendar(): void
     {
         $this->output[] = 'END:VCALENDAR';
     }
@@ -84,7 +75,7 @@ class NowCal
     /**
      * Create the VEvent and include all its props.
      */
-    protected function createEvent()
+    protected function createEvent(): void
     {
         $this->output[] = 'BEGIN:VEVENT';
 
@@ -107,6 +98,7 @@ class NowCal
         if ($this->has($key)) {
             return $this->getParameterKey($key) . ':' . $this->getParameterValue($key);
         }
+
         if ($this->required($key)) {
             throw new \Exception('Key "' . $key . '" is not set but is required');
         }

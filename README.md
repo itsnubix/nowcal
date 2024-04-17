@@ -31,9 +31,9 @@ The following properties can be get/set on the NowCal instance. Users can take a
 
 | Property | Description                                                                                            |
 | -------- | ------------------------------------------------------------------------------------------------------ |
-| start    | A string parseable by Carbon                                                                           |
-| end      | A string parseable by Carbon, as per RFC 5545, only an end value or duration value may be used         |
-| duration | A string parseable by CarbonInterval, as per RFC 5545, only an end value or duration value may be used |
+| start    | A string parseable by DateTime                                                                         |
+| end      | A string parseable by DateTime, as per RFC 5545, only an end value or duration value may be used       |
+| duration | A string parseable by DateInterval, as per RFC 5545, only an end value or duration value may be used   |
 | summary  | A short description of the event                                                                       |
 | location | The location where the event is taking place                                                           |
 
@@ -43,8 +43,10 @@ The following properties can be get/set on the NowCal instance. Users can take a
 $props = [
   'start' => 'now',
   'end' => 'now + 1 hour',
+  // OR
+  'duration' => '28d 6h 42m 12s',
   'summary' => '',
-  'location' => ''
+  'location' => '',
 ];
 
 // Creates a NowCal instance
@@ -59,9 +61,3 @@ $nowcal->plain; // or NowCal::plain($props)
 // Exports a path to a tempfile
 $nowcal->file; // or NowCal::file($props)
 ```
-
-## Todo
-
-- Support additional properties as outlined on [RFC 5545](https://tools.ietf.org/html/rfc5545)
-- ~~Build out ability to create and export tempfile for NowCal~~
-- ~~Backfill with tests~~

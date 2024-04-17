@@ -5,9 +5,9 @@ vendor
 .vscode
 coverage
 .DS_Store
-Carbon-*.zip
 coverage.xml
 .php_cs.cache
+.php-cs-fixer.cache
 composer.lock
 composer.phar
 .phpunit.result.cache
