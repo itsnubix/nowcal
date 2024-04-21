@@ -9,16 +9,20 @@ class NowCal
 {
     /**
      * The required fields for the VCalendar.
+     *
+     * @var array
      */
-    public const array VCALENDAR = [
+    public const VCALENDAR = [
         'prodid',
         'version',
     ];
 
     /**
      * The required fields for the VEvent.
+     *
+     * @var array
      */
-    public const array VEVENT = [
+    public const VEVENT = [
         'uid',
         'created',
         'stamp',
@@ -27,9 +31,11 @@ class NowCal
     /**
      * The fields that are allowed to be set by the user.
      *
+     * @var array
+     *
      * @see https://tools.ietf.org/html/rfc5545#section-3.8
      */
-    public const array ALLOWED = [
+    public const ALLOWED = [
         'start',
         'end',
         'summary',
@@ -40,8 +46,10 @@ class NowCal
 
     /**
      * The fields required by the iCalendar specification.
+     *
+     * @var array
      */
-    public const array REQUIRED = [
+    public const REQUIRED = [
         'prodid',
         'version',
         'uid',
@@ -52,8 +60,10 @@ class NowCal
 
     /**
      * All the properties that need to be cast.
+     *
+     * @var array
      */
-    public const array CASTS = [
+    public const CASTS = [
         'duration' => 'interval',
         'created' => 'datetime',
         'stamp' => 'datetime',
@@ -63,15 +73,17 @@ class NowCal
 
     /**
      * CRLF return.
+     *
+     * @var string
      */
-    public const string CRLF = "\r\n";
+    public const CRLF = "\r\n";
 
     /**
      * The format to use for datetimes.
      *
      * @var string
      */
-    public const string DATETIME_FORMAT = 'Ymd\THis\Z';
+    public const DATETIME_FORMAT = 'Ymd\THis\Z';
 
     /**
      * iCalendar Product Identifier.
