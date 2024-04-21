@@ -1,0 +1,29 @@
+name: Test
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+  phpunit:
+    name: PHPUnit
+    timeout-minutes: 10
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ['8.1', '8.2', '8.3']
+    steps:
+      - name: 🛎 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: xdebug
+
+      - name: 🔨 Install composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: 🧪 Run tests
+        run: ./vendor/bin/phpunit
