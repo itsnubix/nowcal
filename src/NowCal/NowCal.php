@@ -16,6 +16,7 @@ class NowCal
      * @var array
      */
     public const VCALENDAR = [
+        'method',
         'prodid',
         'version',
     ];
@@ -39,12 +40,14 @@ class NowCal
      * @see https://tools.ietf.org/html/rfc5545#section-3.8
      */
     public const ALLOWED = [
-        'uid',
         'end',
+        'uid',
         'start',
+        'method',
         'summary',
         'location',
         'duration',
+        'sequence',
         'timezone',
     ];
 
@@ -151,6 +154,22 @@ class NowCal
      * @see https://tools.ietf.org/html/rfc5545#section-3.8.1.7
      */
     public ?string $location = null;
+
+    /**
+     * This property defines the iCalendar object method associated
+     * with the calendar object.
+     *
+     * @see https://www.rfc-editor.org/rfc/rfc5546#section-3.2
+     */
+    public ?string $method = null;
+
+    /**
+     * This property defines the revision sequence number of the calendar
+     * component within a sequence of revisions.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.7.4
+     */
+    public ?string $sequence = null;
 
     /**
      * This property defines the timezone for the calendar meeting
@@ -302,6 +321,26 @@ class NowCal
     }
 
     /**
+     * Set the event's method.
+     */
+    public function method(string $method): self
+    {
+        $this->set('method', strtoupper($method));
+
+        return $this;
+    }
+
+    /**
+     * Set the event's sequence.
+     */
+    public function sequence(string|int $sequence): self
+    {
+        $this->set('sequence', (string) $sequence);
+
+        return $this;
+    }
+
+    /**
      * Check if the key is allowed to be set.
      */
     protected function allowed(string $key): bool
@@ -434,7 +473,9 @@ class NowCal
         $this->output[] = 'BEGIN:VCALENDAR';
 
         foreach (static::VCALENDAR as $key) {
-            $this->output[] = $this->getParameter($key);
+            if ($this->has($key)) {
+                $this->output[] = $this->getParameter($key);
+            }
         }
     }
 
@@ -591,7 +632,7 @@ class NowCal
         return array_filter(
             array_merge(static::VEVENT, static::ALLOWED),
             fn($key) => match ($key) {
-                'timezone' => false,
+                'uid', 'method', 'timezone' => false,
                 default => $this->has($key),
             },
         );

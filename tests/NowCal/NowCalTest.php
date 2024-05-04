@@ -159,4 +159,18 @@ class NowCalTest extends TestCase
 
         $this->assertEquals($uid, $this->nowcal->uid);
     }
+
+    public function test_it_can_set_a_sequence()
+    {
+        $this->nowcal->sequence($sequence = 1);
+
+        $this->assertEquals($sequence, $this->nowcal->sequence);
+    }
+
+    public function test_it_can_set_a_method()
+    {
+        $this->nowcal->method($method = 'request');
+
+        $this->assertEquals(strtoupper($method), $this->nowcal->method);
+    }
 }
