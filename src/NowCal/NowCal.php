@@ -27,7 +27,6 @@ class NowCal
      * @var array
      */
     public const VEVENT = [
-        'uid',
         'stamp',
         'created',
     ];
@@ -632,7 +631,7 @@ class NowCal
         return array_filter(
             array_merge(static::VEVENT, static::ALLOWED),
             fn($key) => match ($key) {
-                'uid', 'method', 'timezone' => false,
+                'method', 'timezone' => false,
                 default => $this->has($key),
             },
         );

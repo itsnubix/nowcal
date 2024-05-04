@@ -145,8 +145,7 @@ class NowCalTest extends TestCase
 
     public function test_places_that_do_not_witness_dst_dont_get_daylight_hours()
     {
-        $this->nowcal->timezone($timezone = 'Africa/Algiers')
-        ->start('now');
+        $this->nowcal->timezone($timezone = 'Africa/Algiers')->start('now');
 
         $this->assertStringContainsString($timezone, $this->nowcal->plain);
         $this->assertStringContainsString('BEGIN:VTIMEZONE', $this->nowcal->plain);
@@ -157,7 +156,9 @@ class NowCalTest extends TestCase
     {
         $this->nowcal->uid($uid = 'abcd-1234');
 
-        $this->assertEquals($uid, $this->nowcal->uid);
+        echo $this->nowcal->plain;
+
+        $this->assertEquals('UID:' . $uid, 'UID:' . $this->nowcal->uid);
     }
 
     public function test_it_can_set_a_sequence()
