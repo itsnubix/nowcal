@@ -45,8 +45,8 @@ $props = [
   'end' => 'now + 1 hour',
   // OR
   'duration' => '28d 6h 42m 12s',
-  'summary' => '',
-  'location' => '',
+  'summary' => 'Daft Punk is playing',
+  'location' => 'My House',
 ];
 
 // Creates a NowCal instance
