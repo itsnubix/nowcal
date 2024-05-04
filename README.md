@@ -36,6 +36,8 @@ The following properties can be get/set on the NowCal instance. Users can take a
 | duration | A string parseable by DateInterval, as per RFC 5545, only an end value or duration value may be used                                |
 | summary  | A short description of the event                                                                                                    |
 | location | The location where the event is taking place                                                                                        |
+| sequence | An integer that represents the version number                                                                                       |
+| method   | send if required, publish/cancel/etc                                                                                                |
 
 ### Methods
 
