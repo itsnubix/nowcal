@@ -4,6 +4,7 @@ namespace NowCal;
 
 use DateInterval;
 use DateTime;
+use DateTimeZone;
 
 class NowCal
 {
@@ -24,8 +25,8 @@ class NowCal
      */
     public const VEVENT = [
         'uid',
-        'created',
         'stamp',
+        'created',
     ];
 
     /**
@@ -36,8 +37,8 @@ class NowCal
      * @see https://tools.ietf.org/html/rfc5545#section-3.8
      */
     public const ALLOWED = [
-        'start',
         'end',
+        'start',
         'summary',
         'location',
         'duration',
@@ -50,12 +51,12 @@ class NowCal
      * @var array
      */
     public const REQUIRED = [
-        'prodid',
-        'version',
         'uid',
-        'created',
         'stamp',
         'start',
+        'prodid',
+        'created',
+        'version',
     ];
 
     /**
@@ -64,11 +65,12 @@ class NowCal
      * @var array
      */
     public const CASTS = [
-        'duration' => 'interval',
-        'created' => 'datetime',
+        'end' => 'datetime',
         'stamp' => 'datetime',
         'start' => 'datetime',
-        'end' => 'datetime',
+        'created' => 'datetime',
+        'duration' => 'interval',
+        'timezone' => 'timezone',
     ];
 
     /**
@@ -83,7 +85,7 @@ class NowCal
      *
      * @var string
      */
-    public const DATETIME_FORMAT = 'Ymd\THis\Z';
+    public const DATETIME_FORMAT = 'Ymd\THis';
 
     /**
      * iCalendar Product Identifier.
@@ -300,14 +302,12 @@ class NowCal
     {
         if (is_array($key)) {
             $this->merge($key);
-        } else {
-            if (is_callable($val)) {
-                $val = $val();
-            }
+            return;
+        }
 
-            if ($this->allowed($key)) {
-                $this->{$key} = $val;
-            }
+        if ($this->allowed($key)) {
+            $this->{$key} = is_callable($val) ? $val() : $val;
+            return;
         }
     }
 
@@ -322,7 +322,7 @@ class NowCal
     /**
      * Merge multiple properties.
      */
-    protected function merge(array $props)
+    protected function merge(array $props): void
     {
         foreach ($props as $key => $val) {
             $this->set($key, $val);
@@ -334,14 +334,20 @@ class NowCal
      */
     protected function cast(mixed $value, ?string $as = null): string
     {
-        switch ($as) {
-            case 'datetime':
-                return $this->castDateTime($value);
-            case 'interval':
-                return $this->castInterval($value);
-            default:
-                return $value;
-        }
+        return match ($as) {
+            'datetime' => $this->castDateTime($value),
+            'interval' => $this->castInterval($value),
+            'timezone' => $this->castTimezone($value),
+            default => $value,
+        };
+    }
+
+    /**
+     * Check if the specified key has a caster.
+     */
+    protected function hasCaster(string $key): bool
+    {
+        return array_key_exists($key, static::CASTS);
     }
 
     /**
@@ -357,15 +363,12 @@ class NowCal
      */
     protected function castInterval(mixed $value): string
     {
-        return $this->createInterval($value);
+        return $this->transformDateIntervalToString($this->createDateIntervalFromString($value));
     }
 
-    /**
-     * Check if the specified key has a caster.
-     */
-    protected function hasCaster(string $key): bool
+    protected function castTimezone(mixed $value): string
     {
-        return array_key_exists($key, static::CASTS);
+        return (new DateTimeZone($value))->getName();
     }
 
     /**
@@ -376,6 +379,7 @@ class NowCal
         $this->output = [];
 
         $this->beginCalendar();
+        $this->createTimezone();
         $this->createEvent();
         $this->endCalendar();
 
@@ -400,6 +404,65 @@ class NowCal
     protected function endCalendar(): void
     {
         $this->output[] = 'END:VCALENDAR';
+    }
+
+    protected function createTimezone(): void
+    {
+        if (!$this->timezone) {
+            return;
+        }
+
+        $now = time();
+        $year = 31_536_000; // 1 year in seconds
+        $timezone = new DateTimeZone($this->timezone);
+        $transitions = $timezone->getTransitions($now - $year, $now + $year);
+
+        $hasDaylightSavings = false;
+        $standard = $daylight = $transitions[0];
+
+        $this->output[] = 'BEGIN:VTIMEZONE';
+        $this->output[] = 'TZID:' . $timezone->getName();
+        $this->output[] = 'TZNAME:' . $transitions[0]['abbr'];
+
+        foreach ($transitions as $index => $transition) {
+            if ($index === 0) {
+                continue;
+            }
+
+            if (!$hasDaylightSavings && $transition['isdst']) {
+                $hasDaylightSavings = true;
+            }
+
+            if ($transition['isdst']) {
+                $daylight = $transition;
+            } else {
+                $standard = $transition;
+            }
+        }
+
+        $this->output[] = 'BEGIN:STANDARD';
+        $this->output[] = 'DTSTART:' . $this->createDateTime($standard['time']);
+        $this->output[] = 'TZOFFSETFROM:' . $this->formatOffset(($daylight)['offset']);
+        $this->output[] = 'TZOFFSETTO:' . $this->formatOffset($standard['offset']);
+        $this->output[] = 'END:STANDARD';
+
+        if ($hasDaylightSavings) {
+            $this->output[] = 'BEGIN:DAYLIGHT';
+            $this->output[] = 'DTSTART:' . $this->createDateTime($daylight['time']);
+            $this->output[] = 'TZOFFSETFROM:' . $this->formatOffset($standard['offset']);
+            $this->output[] = 'TZOFFSETTO:' . $this->formatOffset($daylight['offset']);
+            $this->output[] = 'END:DAYLIGHT';
+        }
+
+        $this->output[] = 'END:VTIMEZONE';
+    }
+
+    protected function formatOffset(int $offset): string
+    {
+        $hours = floor($offset / 3600);
+        $minutes = floor(($offset - $hours * 3600) / 60);
+
+        return sprintf('%+03d%02d', $hours, $minutes);
     }
 
     /**
@@ -441,14 +504,28 @@ class NowCal
     {
         $key = strtoupper($name);
 
-        switch ($name) {
-            case 'start':
-            case 'end':
-            case 'stamp':
-                return 'DT' . $key;
-            default:
-                return $key;
+        return match ($name) {
+            'start', 'end' => $this->optionallyAddTimezoneToKey($key),
+            'stamp' => 'DT' . $key,
+            default => $key,
+        };
+    }
+
+    /**
+     * If there is a timezone transform eligible keys so they include them.
+     *
+     * @example DTSTART;TZID=Europe/London
+     */
+    protected function optionallyAddTimezoneToKey(string $key): string
+    {
+        $prefix = 'DT';
+        $suffix = '';
+
+        if ($this->timezone) {
+            $suffix = ';TZID=' . (new DateTimeZone($this->timezone))->getName();
         }
+
+        return $prefix . $key . $suffix;
     }
 
     /**
@@ -474,8 +551,9 @@ class NowCal
     {
         return array_filter(
             array_merge(static::VEVENT, static::ALLOWED),
-            function ($key) {
-                return $this->has($key);
+            fn($key) => match ($key) {
+                'timezone' => false,
+                default => $this->has($key),
             },
         );
     }
@@ -571,14 +649,6 @@ class NowCal
     {
         return (new DateTime($datetime ?? 'now'))
             ->format(static::DATETIME_FORMAT);
-    }
-
-    /**
-     * Parses and creates an ISO 8601.2004 interval.
-     */
-    protected function createInterval(string $interval = '0s'): string
-    {
-        return $this->transformDateIntervalToString($this->createDateIntervalFromString($interval));
     }
 
     /**
