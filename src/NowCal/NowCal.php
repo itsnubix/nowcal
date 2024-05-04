@@ -613,15 +613,15 @@ class NowCal
      */
     protected function getParameterValue(string $key): string
     {
-        if ($this->has($key)) {
-            if ($this->hasCaster($key)) {
-                return $this->cast($this->{$key}, static::CASTS[$key]);
-            }
-
-            return $this->{$key};
+        if (!$this->has($key)) {
+            return '';
         }
 
-        return null;
+        if ($this->hasCaster($key)) {
+            return $this->cast($this->{$key}, static::CASTS[$key]);
+        }
+
+        return $this->{$key};
     }
 
     /**
@@ -730,7 +730,13 @@ class NowCal
      */
     protected function createDateTime(string|DateTime|Closure $datetime = 'now'): string
     {
-        return (new DateTime($datetime))->format(static::DATETIME_FORMAT);
+        $datetime = new DateTime($datetime);
+
+        if ($this->timezone) {
+            $datetime->setTimezone(new DateTimeZone($this->timezone));
+        }
+
+        return $datetime->format(static::DATETIME_FORMAT);
     }
 
     /**
