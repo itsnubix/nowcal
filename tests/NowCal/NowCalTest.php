@@ -134,4 +134,11 @@ class NowCalTest extends TestCase
 
         echo $this->nowcal->plain;
     }
+
+    public function test_it_can_customize_the_uid()
+    {
+        $this->nowcal->uid($uid = 'abcd-1234');
+
+        $this->assertEquals($uid, $this->nowcal->uid);
+    }
 }

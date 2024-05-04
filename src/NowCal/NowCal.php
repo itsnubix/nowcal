@@ -2,9 +2,11 @@
 
 namespace NowCal;
 
+use Closure;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
+use Exception;
 
 class NowCal
 {
@@ -37,6 +39,7 @@ class NowCal
      * @see https://tools.ietf.org/html/rfc5545#section-3.8
      */
     public const ALLOWED = [
+        'uid',
         'end',
         'start',
         'summary',
@@ -101,6 +104,14 @@ class NowCal
      * @see https://tools.ietf.org/html/rfc5545#section-3.7.4
      */
     protected string $version = '2.0';
+
+    /**
+     * The globally unique identifier for the calendar component. If not
+     * provided one will be generated automatically.
+     *
+     * @see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.7
+     */
+    public ?string $uid = null;
 
     /**
      * This property specifies when the calendar component begins.
@@ -203,10 +214,17 @@ class NowCal
         return self::create($props)->file;
     }
 
+    public function uid(string|Closure $uid): self
+    {
+        $this->set('uid', $uid);
+
+        return $this;
+    }
+
     /**
      * Set the event's start date.
      */
-    public function start(string|\Closure|\DateTime $datetime): self
+    public function start(string|Closure|DateTime $datetime): self
     {
         $this->set('start', $datetime);
 
@@ -216,7 +234,7 @@ class NowCal
     /**
      * Set the event's end date.
      */
-    public function end(string|\Closure|\DateTime $datetime): self
+    public function end(string|Closure|DateTime $datetime): self
     {
         if (!$this->has('duration')) {
             $this->set('end', $datetime);
@@ -228,7 +246,7 @@ class NowCal
     /**
      * Set the event's summary.
      */
-    public function summary(string|\Closure $summary): self
+    public function summary(string|Closure $summary): self
     {
         $this->set('summary', $summary);
 
@@ -238,7 +256,7 @@ class NowCal
     /**
      * Set the event's location.
      */
-    public function location(string|\Closure $location): self
+    public function location(string|Closure $location): self
     {
         $this->set('location', $location);
 
@@ -248,7 +266,7 @@ class NowCal
     /**
      * Set the event's duration using a DateInterval.
      */
-    public function duration(string|\Closure $duration): self
+    public function duration(string|Closure $duration): self
     {
         if (!$this->has('end')) {
             $this->set('duration', $duration);
@@ -260,7 +278,7 @@ class NowCal
     /**
      * Set the event's duration using a DateInterval.
      */
-    public function timezone(string|\Closure $timezone): self
+    public function timezone(string|DateTimeZone|Closure $timezone): self
     {
         $this->set('timezone', $timezone);
 
@@ -430,14 +448,13 @@ class NowCal
             }
 
             if (!$hasDaylightSavings && $transition['isdst']) {
+                $daylight = $transition;
                 $hasDaylightSavings = true;
+
+                continue;
             }
 
-            if ($transition['isdst']) {
-                $daylight = $transition;
-            } else {
-                $standard = $transition;
-            }
+            $standard = $transition;
         }
 
         $this->output[] = 'BEGIN:STANDARD';
@@ -493,7 +510,7 @@ class NowCal
         }
 
         if ($this->required($key)) {
-            throw new \Exception('Key "' . $key . '" is not set but is required');
+            throw new Exception('Key "' . $key . '" is not set but is required');
         }
     }
 
@@ -563,6 +580,10 @@ class NowCal
      */
     protected function getUidAttribute(): string
     {
+        if ($this->uid) {
+            return $this->uid;
+        }
+
         // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
         $data = $data ?? random_bytes(16);
         assert(strlen($data) == 16);
@@ -645,7 +666,7 @@ class NowCal
     /**
      * Parses and creates a datetime.
      */
-    protected function createDateTime(string|DateTime|\Closure $datetime = 'now'): string
+    protected function createDateTime(string|DateTime|Closure $datetime = 'now'): string
     {
         return (new DateTime($datetime ?? 'now'))
             ->format(static::DATETIME_FORMAT);

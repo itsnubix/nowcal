@@ -27,13 +27,15 @@ $event = NowCal::create(['start' => 'October 5, 2019 6:03PM']))
 
 The following properties can be get/set on the NowCal instance. Users can take advantage of the set property helpers in the class, i.e.: `$nowcal->location('Event Location');` as they provide a nice syntax to string multiple calls together and support callbacks if necessary.
 
-| Property | Description                                                                                            |
-| -------- | ------------------------------------------------------------------------------------------------------ |
-| start    | A string parseable by DateTime                                                                         |
-| end      | A string parseable by DateTime, as per RFC 5545, only an end value or duration value may be used       |
-| duration | A string parseable by DateInterval, as per RFC 5545, only an end value or duration value may be used   |
-| summary  | A short description of the event                                                                       |
-| location | The location where the event is taking place                                                           |
+| Property | Description                                                                                                                         |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| uid      | A globally unique ID. NOTE: passing the same ICS file into a calendar app with the same UI allows you to update the existing invite |
+| start    | A string parseable by DateTime                                                                                                      |
+| timezone | A string parseable by DateTimeZone                                                                                                  |
+| end      | A string parseable by DateTime, as per RFC 5545, only an end value or duration value may be used                                    |
+| duration | A string parseable by DateInterval, as per RFC 5545, only an end value or duration value may be used                                |
+| summary  | A short description of the event                                                                                                    |
+| location | The location where the event is taking place                                                                                        |
 
 ### Methods
 
