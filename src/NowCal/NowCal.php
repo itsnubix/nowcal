@@ -224,9 +224,13 @@ class NowCal
     /**
      * Set the event's start date.
      */
-    public function start(string|Closure|DateTime $datetime): self
+    public function start(string|Closure|DateTime $start): self
     {
-        $this->set('start', $datetime);
+        if ($start instanceof DateTime) {
+            $start = $start->format(static::DATETIME_FORMAT);
+        }
+
+        $this->set('start', $start);
 
         return $this;
     }
@@ -234,10 +238,14 @@ class NowCal
     /**
      * Set the event's end date.
      */
-    public function end(string|Closure|DateTime $datetime): self
+    public function end(string|Closure|DateTime $end): self
     {
+        if ($end instanceof DateTime) {
+            $end = $end->format(static::DATETIME_FORMAT);
+        }
+
         if (!$this->has('duration')) {
-            $this->set('end', $datetime);
+            $this->set('end', $end);
         }
 
         return $this;
@@ -266,8 +274,12 @@ class NowCal
     /**
      * Set the event's duration using a DateInterval.
      */
-    public function duration(string|Closure $duration): self
+    public function duration(string|DateInterval|Closure $duration): self
     {
+        if ($duration instanceof DateInterval) {
+            $duration = $this->transformDateIntervalToString($duration);
+        }
+
         if (!$this->has('end')) {
             $this->set('duration', $duration);
         }
@@ -280,6 +292,10 @@ class NowCal
      */
     public function timezone(string|DateTimeZone|Closure $timezone): self
     {
+        if ($timezone instanceof DateTimeZone) {
+            $timezone = $timezone->getName();
+        }
+
         $this->set('timezone', $timezone);
 
         return $this;
@@ -323,10 +339,16 @@ class NowCal
             return;
         }
 
-        if ($this->allowed($key)) {
-            $this->{$key} = is_callable($val) ? $val() : $val;
+        if (!$this->allowed($key)) {
             return;
         }
+
+        if (is_callable($val)) {
+            $this->set($key, $val());
+            return;
+        }
+
+        $this->{$key} = $val;
     }
 
     /**
@@ -584,9 +606,8 @@ class NowCal
             return $this->uid;
         }
 
-        // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
-        $data = $data ?? random_bytes(16);
-        assert(strlen($data) == 16);
+        $data = random_bytes(16);
+        assert(strlen($data) === 16);
 
         // Set version to 0100
         $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
@@ -668,8 +689,7 @@ class NowCal
      */
     protected function createDateTime(string|DateTime|Closure $datetime = 'now'): string
     {
-        return (new DateTime($datetime ?? 'now'))
-            ->format(static::DATETIME_FORMAT);
+        return (new DateTime($datetime))->format(static::DATETIME_FORMAT);
     }
 
     /**

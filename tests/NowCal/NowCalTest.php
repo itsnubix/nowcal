@@ -2,7 +2,10 @@
 
 namespace Tests\NowCal;
 
+use DateInterval;
 use DateTime;
+use DateTimeZone;
+use NowCal\NowCal;
 use Tests\TestCase;
 
 class NowCalTest extends TestCase
@@ -31,8 +34,10 @@ class NowCalTest extends TestCase
     public function test_it_can_get_set_a_duration()
     {
         $this->nowcal->duration($time = '1h');
-
         $this->assertEquals($time, $this->nowcal->duration);
+
+        $this->nowcal->duration($time = new DateInterval('PT1H'));
+        $this->assertEquals('PT1H', $this->nowcal->duration);
     }
 
     public function test_it_casts_end_as_an_iso_duration()
@@ -62,12 +67,11 @@ class NowCalTest extends TestCase
     public function test_it_casts_end_as_a_datetime()
     {
         $this->nowcal->end($time = 'October 5, 2019 6:03PM');
-        $format = 'Ymd\THis\Z';
 
-        $this->assertStringContainsString((new DateTime($time))->format($format), $this->nowcal->plain);
+        $this->assertStringContainsString((new DateTime($time))->format(NowCal::DATETIME_FORMAT), $this->nowcal->plain);
     }
 
-    public function test_it_can_get_and_set_a_end_time()
+    public function test_it_can_get_and_set_a_location()
     {
         $this->nowcal->location($location = '123 Fake Street NW');
 
@@ -84,16 +88,32 @@ class NowCalTest extends TestCase
     public function test_it_can_get_and_set_a_start_time()
     {
         $this->nowcal->start($time = 'now');
-
         $this->assertEquals($time, $this->nowcal->start);
+
+        $this->nowcal->start(fn() => $time = 'now');
+        $this->assertEquals($time, $this->nowcal->start);
+
+        $this->nowcal->start($time = new DateTime('now'));
+        $this->assertEquals($time->format(NowCal::DATETIME_FORMAT), $this->nowcal->start);
+    }
+
+    public function test_it_can_get_and_set_an_end_time()
+    {
+        $this->nowcal->end($time = 'now');
+        $this->assertEquals($time, $this->nowcal->end);
+
+        $this->nowcal->end(fn() => $time = 'now');
+        $this->assertEquals($time, $this->nowcal->end);
+
+        $this->nowcal->end($time = new DateTime('now'));
+        $this->assertEquals($time->format(NowCal::DATETIME_FORMAT), $this->nowcal->end);
     }
 
     public function test_it_casts_start_as_a_datetime()
     {
-        $format = 'Ymd\THis\Z';
         $this->nowcal->start($time = 'October 5, 2019 6:03PM');
 
-        $this->assertStringContainsString((new DateTime($time))->format($format), $this->nowcal->plain);
+        $this->assertStringContainsString((new DateTime($time))->format(NowCal::DATETIME_FORMAT), $this->nowcal->plain);
     }
 
     public function test_it_can_get_and_set_a_summary()
@@ -112,15 +132,15 @@ class NowCalTest extends TestCase
 
     public function test_it_can_set_a_timezone()
     {
-        $this->nowcal->timezone($timezone = 'America/Edmonton')
-            ->start('now');
-
+        $this->nowcal->timezone($timezone = 'America/Edmonton')->start('now');
         $this->assertStringContainsString($timezone, $this->nowcal->plain);
+
+        $this->nowcal->timezone($timezone = new DateTimeZone('America/Edmonton'))->start('now');
+        $this->assertStringContainsString($timezone->getName(), $this->nowcal->plain);
+
         $this->assertStringContainsString('BEGIN:VTIMEZONE', $this->nowcal->plain);
         $this->assertStringContainsString('BEGIN:DAYLIGHT', $this->nowcal->plain);
         $this->assertStringContainsString('BEGIN:STANDARD', $this->nowcal->plain);
-
-        echo $this->nowcal->plain;
     }
 
     public function test_places_that_do_not_witness_dst_dont_get_daylight_hours()
@@ -131,8 +151,6 @@ class NowCalTest extends TestCase
         $this->assertStringContainsString($timezone, $this->nowcal->plain);
         $this->assertStringContainsString('BEGIN:VTIMEZONE', $this->nowcal->plain);
         $this->assertStringNotContainsString('BEGIN:DAYLIGHT', $this->nowcal->plain);
-
-        echo $this->nowcal->plain;
     }
 
     public function test_it_can_customize_the_uid()
