@@ -56,7 +56,6 @@ class NowCal
      * @var array
      */
     public const REQUIRED = [
-        'uid',
         'stamp',
         'start',
         'prodid',
@@ -71,6 +70,7 @@ class NowCal
      */
     public const CASTS = [
         'end' => 'datetime',
+        'method' => 'upper',
         'stamp' => 'datetime',
         'start' => 'datetime',
         'created' => 'datetime',
@@ -97,7 +97,7 @@ class NowCal
      *
      * @see https://tools.ietf.org/html/rfc5545#section-3.7.3
      */
-    private string $prodid = '-//itsnubix//NowCal//EN';
+    private string $prodid = '-//NowCal//EN';
 
     /**
      * Specifies the minimum iCalendar specification that is required
@@ -324,7 +324,7 @@ class NowCal
      */
     public function method(string $method): self
     {
-        $this->set('method', strtoupper($method));
+        $this->set('method', $method);
 
         return $this;
     }
@@ -386,6 +386,11 @@ class NowCal
             return;
         }
 
+        // if (method_exists($this, $key)) {
+        //     $this->{$key}($val);
+        //     return;
+        // }
+
         $this->{$key} = $val;
     }
 
@@ -413,6 +418,7 @@ class NowCal
     protected function cast(mixed $value, ?string $as = null): string
     {
         return match ($as) {
+            'upper' => $this->castUpper($value),
             'datetime' => $this->castDateTime($value),
             'interval' => $this->castInterval($value),
             'timezone' => $this->castTimezone($value),
@@ -426,6 +432,14 @@ class NowCal
     protected function hasCaster(string $key): bool
     {
         return array_key_exists($key, static::CASTS);
+    }
+
+    /**
+     * Cast the specified value to uppercase.
+     */
+    public function castUpper($value): string
+    {
+        return strtoupper($value);
     }
 
     /**
@@ -516,7 +530,9 @@ class NowCal
                 continue;
             }
 
-            $standard = $transition;
+            if (!$transition['isdst']) {
+                $standard = $transition;
+            }
         }
 
         $this->output[] = 'BEGIN:STANDARD';
@@ -550,6 +566,7 @@ class NowCal
     protected function createEvent(): void
     {
         $this->output[] = 'BEGIN:VEVENT';
+        $this->output[] = $this->getUidAttribute();
 
         foreach ($this->event_parameters as $key) {
             $this->output[] = $this->getParameter($key);
@@ -572,7 +589,9 @@ class NowCal
         }
 
         if ($this->required($key)) {
-            throw new Exception('Key "' . $key . '" is not set but is required');
+            $value = $this->{$key} ?? '';
+
+            return $this->getParameterKey($key) . ':' . $value;
         }
     }
 
@@ -632,13 +651,13 @@ class NowCal
             array_merge(static::VEVENT, static::ALLOWED),
             fn($key) => match ($key) {
                 'method', 'timezone' => false,
-                default => $this->has($key),
+                default => $this->required($key) || $this->has($key),
             },
         );
     }
 
     /**
-     * Create and return a UUID.
+     * Create and return a uid.
      */
     protected function getUidAttribute(): string
     {

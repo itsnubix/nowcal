@@ -155,10 +155,7 @@ class NowCalTest extends TestCase
     public function test_it_can_customize_the_uid()
     {
         $this->nowcal->uid($uid = 'abcd-1234');
-
-        echo $this->nowcal->plain;
-
-        $this->assertEquals('UID:' . $uid, 'UID:' . $this->nowcal->uid);
+        $this->assertStringContainsString('UID:' . $uid, $this->nowcal->plain);
     }
 
     public function test_it_can_set_a_sequence()
@@ -172,6 +169,6 @@ class NowCalTest extends TestCase
     {
         $this->nowcal->method($method = 'request');
 
-        $this->assertEquals(strtoupper($method), $this->nowcal->method);
+        $this->assertEquals($method, $this->nowcal->method);
     }
 }
