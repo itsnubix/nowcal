@@ -566,7 +566,7 @@ class NowCal
     protected function createEvent(): void
     {
         $this->output[] = 'BEGIN:VEVENT';
-        $this->output[] = $this->getUidAttribute();
+        $this->output[] = 'UID:' . $this->getUidAttribute();
 
         foreach ($this->event_parameters as $key) {
             $this->output[] = $this->getParameter($key);
