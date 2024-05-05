@@ -650,7 +650,7 @@ class NowCal
         return array_filter(
             array_merge(static::VEVENT, static::ALLOWED),
             fn($key) => match ($key) {
-                'method', 'timezone' => false,
+                'uid', 'method', 'timezone' => false,
                 default => $this->required($key) || $this->has($key),
             },
         );
