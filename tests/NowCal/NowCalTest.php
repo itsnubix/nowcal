@@ -36,7 +36,7 @@ class NowCalTest extends TestCase
         $this->nowcal->duration($time = '1h');
         $this->assertEquals($time, $this->nowcal->duration);
 
-        $this->nowcal->duration($time = new DateInterval('PT1H'));
+        $this->nowcal->duration(new DateInterval('PT1H'));
         $this->assertEquals('PT1H', $this->nowcal->duration);
     }
 
@@ -170,5 +170,37 @@ class NowCalTest extends TestCase
         $this->nowcal->method($method = 'request');
 
         $this->assertEquals($method, $this->nowcal->method);
+    }
+
+    public function test_it_can_set_a_reminder_with_simple_string()
+    {
+        $this->nowcal->reminder('15m');
+
+        $this->assertStringContainsString('BEGIN:VALARM', $this->nowcal->plain);
+        $this->assertStringContainsString('TRIGGER:-PT15M', $this->nowcal->plain);
+        $this->assertStringContainsString('ACTION:DISPLAY', $this->nowcal->plain);
+        $this->assertStringContainsString('DESCRIPTION:Reminder', $this->nowcal->plain);
+        $this->assertStringContainsString('END:VALARM', $this->nowcal->plain);
+    }
+
+    public function test_it_can_set_a_reminder_with_iso8601_string()
+    {
+        $this->nowcal->reminder( 'PT30M');
+
+        $this->assertStringContainsString('BEGIN:VALARM', $this->nowcal->plain);
+        $this->assertStringContainsString('TRIGGER:-PT30M', $this->nowcal->plain);
+        $this->assertStringContainsString('ACTION:DISPLAY', $this->nowcal->plain);
+        $this->assertStringContainsString('DESCRIPTION:Reminder', $this->nowcal->plain);
+        $this->assertStringContainsString('END:VALARM', $this->nowcal->plain);
+    }
+    public function test_it_can_set_a_reminder_with_DateInterval()
+    {
+        $this->nowcal->reminder(new DateInterval('PT1H'));
+
+        $this->assertStringContainsString('BEGIN:VALARM', $this->nowcal->plain);
+        $this->assertStringContainsString('TRIGGER:-PT1H', $this->nowcal->plain);
+        $this->assertStringContainsString('ACTION:DISPLAY', $this->nowcal->plain);
+        $this->assertStringContainsString('DESCRIPTION:Reminder', $this->nowcal->plain);
+        $this->assertStringContainsString('END:VALARM', $this->nowcal->plain);
     }
 }

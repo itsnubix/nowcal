@@ -48,6 +48,7 @@ class NowCal
         'duration',
         'sequence',
         'timezone',
+        'reminder'
     ];
 
     /**
@@ -76,6 +77,7 @@ class NowCal
         'created' => 'datetime',
         'duration' => 'interval',
         'timezone' => 'timezone',
+        'reminder' => 'interval',
     ];
 
     /**
@@ -181,6 +183,13 @@ class NowCal
      * The .ics raw array output.
      */
     protected array $output = [];
+
+    /**
+     * The reminder for the event.
+     *
+     * @see https://www.rfc-editor.org/rfc/rfc5545#section-3.6.6
+     */
+    public ?string $reminder = null;
 
     /**
      * Instantiate the NowCal class.
@@ -335,6 +344,22 @@ class NowCal
     public function sequence(string|int $sequence): self
     {
         $this->set('sequence', (string) $sequence);
+
+        return $this;
+    }
+
+    public function reminder(string|DateInterval|Closure $reminder): self
+    {
+        if ($reminder instanceof DateInterval) {
+            $reminder = $this->transformDateIntervalToString($reminder);
+        }
+
+        // If the reminder is not an ISO 8601 interval then cast it.
+        if  (!str_contains($reminder, 'P')) {
+            $reminder = $this->castInterval($reminder);
+        }
+
+        $this->set('reminder', $reminder);
 
         return $this;
     }
@@ -569,10 +594,33 @@ class NowCal
         $this->output[] = 'UID:' . $this->getUidAttribute();
 
         foreach ($this->event_parameters as $key) {
+
+            // if the $key is set and a create method exists then call it.
+            if  ($this->has($key) &&  method_exists($this, $method = 'create'.ucfirst($key))) {
+                $this->{$method}();
+                continue;
+            }
+
             $this->output[] = $this->getParameter($key);
         }
 
         $this->output[] = 'END:VEVENT';
+    }
+
+    /**
+     * Create the VAlarm with Display action.
+     */
+    protected function createReminder(): void
+    {
+        if (!$this->reminder) {
+            return;
+        }
+
+        $this->output[] = 'BEGIN:VALARM';
+        $this->output[] = 'TRIGGER:' . '-' . $this->reminder;
+        $this->output[] = 'ACTION:DISPLAY';
+        $this->output[] = 'DESCRIPTION:Reminder';
+        $this->output[] = 'END:VALARM';
     }
 
     /**
