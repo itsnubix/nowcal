@@ -433,7 +433,13 @@ class NowCal
     protected function merge(array $props): void
     {
         foreach ($props as $key => $val) {
-            $this->set($key, $val);
+
+            if (method_exists($this, $key)){
+                // The target parameter has specific setter method, use it because it contains casting logic
+                $this->$key($val);
+            }else{
+                $this->set($key, $val);
+            }
         }
     }
 

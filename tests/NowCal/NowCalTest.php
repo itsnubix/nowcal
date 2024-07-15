@@ -181,6 +181,16 @@ class NowCalTest extends TestCase
         $this->assertStringContainsString('ACTION:DISPLAY', $this->nowcal->plain);
         $this->assertStringContainsString('DESCRIPTION:Reminder', $this->nowcal->plain);
         $this->assertStringContainsString('END:VALARM', $this->nowcal->plain);
+
+        $actual = NowCal::plain([
+            'reminder' => '30m',
+        ]);
+
+        $this->assertStringContainsString('BEGIN:VALARM', $actual);
+        $this->assertStringContainsString('TRIGGER:-PT30M', $actual);
+        $this->assertStringContainsString('ACTION:DISPLAY', $actual);
+        $this->assertStringContainsString('DESCRIPTION:Reminder', $actual);
+        $this->assertStringContainsString('END:VALARM', $actual);
     }
 
     public function test_it_can_set_a_reminder_with_iso8601_string()
