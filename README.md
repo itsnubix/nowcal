@@ -28,7 +28,7 @@ $event = NowCal::create(['start' => 'October 5, 2019 6:03PM']))
 The following properties can be get/set on the NowCal instance. Users can take advantage of the set property helpers in the class, i.e.: `$nowcal->location('Event Location');` as they provide a nice syntax to string multiple calls together and support callbacks if necessary.
 
 | Property | Description                                                                                                                         |
-| -------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+|----------|-------------------------------------------------------------------------------------------------------------------------------------|
 | uid      | A globally unique ID. NOTE: passing the same ICS file into a calendar app with the same UI allows you to update the existing invite |
 | start    | A string parseable by DateTime                                                                                                      |
 | timezone | A string parseable by DateTimeZone                                                                                                  |
@@ -38,6 +38,7 @@ The following properties can be get/set on the NowCal instance. Users can take a
 | location | The location where the event is taking place                                                                                        |
 | sequence | An integer that represents the version number                                                                                       |
 | method   | send if required, publish/cancel/etc                                                                                                |
+| reminder | A simple display reminder. A string parseable by DateInterval.                                                                      |
 
 ### Methods
 
