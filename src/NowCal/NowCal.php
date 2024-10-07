@@ -48,7 +48,8 @@ class NowCal
         'duration',
         'sequence',
         'timezone',
-        'reminder'
+        'reminder',
+        'organizer',
     ];
 
     /**
@@ -190,6 +191,13 @@ class NowCal
      * @see https://www.rfc-editor.org/rfc/rfc5545#section-3.6.6
      */
     public ?string $reminder = null;
+
+    /**
+     * The reminder for the event.
+     *
+     * @see https://www.rfc-editor.org/rfc/rfc5545#section-3.8.4.3
+     */
+    public ?string $organizer = null;
 
     /**
      * Instantiate the NowCal class.
@@ -360,6 +368,13 @@ class NowCal
         }
 
         $this->set('reminder', $reminder);
+
+        return $this;
+    }
+
+    public function organizer(string $organizer): self
+    {
+        $this->set('organizer', $organizer);
 
         return $this;
     }
@@ -635,6 +650,15 @@ class NowCal
         $this->output[] = 'ACTION:DISPLAY';
         $this->output[] = 'DESCRIPTION:Reminder';
         $this->output[] = 'END:VALARM';
+    }
+
+    protected function createOrganizer(): void
+    {
+        if (!$this->organizer) {
+            return;
+        }
+
+        $this->output[] = 'ORGANIZER;CN=' . $this->organizer;
     }
 
     /**
