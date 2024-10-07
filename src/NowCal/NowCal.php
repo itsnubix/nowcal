@@ -71,7 +71,7 @@ class NowCal
      */
     public const CASTS = [
         'end' => 'datetime',
-        'method' => 'upper',
+        'method' => 'method',
         'stamp' => 'datetime',
         'start' => 'datetime',
         'created' => 'datetime',
@@ -355,7 +355,7 @@ class NowCal
         }
 
         // If the reminder is not an ISO 8601 interval then cast it.
-        if  (!str_contains($reminder, 'P')) {
+        if (!str_contains($reminder, 'P')) {
             $reminder = $this->castInterval($reminder);
         }
 
@@ -411,11 +411,6 @@ class NowCal
             return;
         }
 
-        // if (method_exists($this, $key)) {
-        //     $this->{$key}($val);
-        //     return;
-        // }
-
         $this->{$key} = $val;
     }
 
@@ -434,10 +429,10 @@ class NowCal
     {
         foreach ($props as $key => $val) {
 
-            if (method_exists($this, $key)){
+            if (method_exists($this, $key)) {
                 // The target parameter has specific setter method, use it because it contains casting logic
                 $this->$key($val);
-            }else{
+            } else {
                 $this->set($key, $val);
             }
         }
@@ -450,6 +445,7 @@ class NowCal
     {
         return match ($as) {
             'upper' => $this->castUpper($value),
+            'method' => $this->castMethod($value),
             'datetime' => $this->castDateTime($value),
             'interval' => $this->castInterval($value),
             'timezone' => $this->castTimezone($value),
@@ -471,6 +467,18 @@ class NowCal
     public function castUpper($value): string
     {
         return strtoupper($value);
+    }
+
+    public function castMethod($value): string
+    {
+        // Laravel has a weird glitch where if you pass 'request' in it will dump
+        // the whole request object into the input. This ensures we can use a
+        // stand-in value for 'request' and it will be cast to 'REQUEST'.
+        if (strtolower($value) === 'req') {
+            $value = 'request';
+        }
+
+        return $this->castUpper($value);
     }
 
     /**
@@ -602,7 +610,7 @@ class NowCal
         foreach ($this->event_parameters as $key) {
 
             // if the $key is set and a create method exists then call it.
-            if  ($this->has($key) &&  method_exists($this, $method = 'create'.ucfirst($key))) {
+            if ($this->has($key) &&  method_exists($this, $method = 'create'.ucfirst($key))) {
                 $this->{$method}();
                 continue;
             }
@@ -703,7 +711,7 @@ class NowCal
     {
         return array_filter(
             array_merge(static::VEVENT, static::ALLOWED),
-            fn($key) => match ($key) {
+            fn ($key) => match ($key) {
                 'uid', 'method', 'timezone' => false,
                 default => $this->required($key) || $this->has($key),
             },
@@ -792,7 +800,7 @@ class NowCal
     protected function convertStringToPascalCase(string $string): string
     {
         $words = explode(' ', str_replace(['-', '_'], ' ', $string));
-        $output = array_map(fn($word) => ucfirst($word), $words);
+        $output = array_map(fn ($word) => ucfirst($word), $words);
 
         return implode($output);
     }
