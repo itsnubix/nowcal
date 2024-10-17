@@ -50,6 +50,7 @@ class NowCal
         'timezone',
         'reminder',
         'organizer',
+        'description',
     ];
 
     /**
@@ -132,6 +133,14 @@ class NowCal
      * @see https://tools.ietf.org/html/rfc5545#section-3.8.2.2
      */
     public ?string $end = null;
+
+    /**
+     * This property specifies the date and time that a calendar
+     * component ends.
+     *
+     * @see https://tools.ietf.org/html/rfc5545#section-3.8.2.2
+     */
+    public ?string $description = null;
 
     /**
      * The duration is a interval coded string (ie, P28DT6H42M12S = 28 days, 6 hours, 42 minutes, 12 seconds)
@@ -375,6 +384,13 @@ class NowCal
     public function organizer(string $organizer): self
     {
         $this->set('organizer', $organizer);
+
+        return $this;
+    }
+
+    public function description(string $description): self
+    {
+        $this->set('description', $description);
 
         return $this;
     }
