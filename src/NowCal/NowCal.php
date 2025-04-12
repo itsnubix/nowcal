@@ -41,6 +41,7 @@ class NowCal
     public const ALLOWED = [
         'end',
         'uid',
+        'description',
         'start',
         'method',
         'summary',
@@ -48,9 +49,8 @@ class NowCal
         'duration',
         'sequence',
         'timezone',
-        'reminder',
         'organizer',
-        'description',
+        'reminder',
     ];
 
     /**

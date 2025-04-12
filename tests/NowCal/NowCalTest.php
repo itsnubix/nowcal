@@ -213,4 +213,19 @@ class NowCalTest extends TestCase
         $this->assertStringContainsString('DESCRIPTION:Reminder', $this->nowcal->plain);
         $this->assertStringContainsString('END:VALARM', $this->nowcal->plain);
     }
+
+    public function test_it_includes_description_before_reminder()
+    {
+        $description = 'This is a test description';
+        $this->nowcal->description($description);
+        $this->nowcal->reminder( 'PT30M');
+
+        $expectedDescriptionProperty = 'DESCRIPTION:'.$description;
+        $this->assertStringContainsString($expectedDescriptionProperty, $this->nowcal->plain);
+        $this->assertStringContainsString('BEGIN:VALARM', $this->nowcal->plain);
+
+        $descriptionIndex = strpos($this->nowcal->plain, $expectedDescriptionProperty);
+        $reminderStartIndex = strpos($this->nowcal->plain, 'BEGIN:VALARM');
+        $this->assertTrue($descriptionIndex < $reminderStartIndex);
+    }
 }
